@@ -20,5 +20,5 @@ class _SingleArgBase(_NotAGeneric, t.Generic[T], abc.ABC):
     def __init__(self, val: t.Optional[T] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: T) -> _SingleArgBase:
+    def __getitem__(self, item: T) -> _SingleArgBase[T]:
         return self.__class__(item)

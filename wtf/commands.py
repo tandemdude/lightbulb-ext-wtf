@@ -20,6 +20,7 @@ __all__ = [
     "Command",
 ]
 
+import collections
 import functools
 import typing as t
 
@@ -31,6 +32,8 @@ from wtf import basic
 from wtf import executable
 from wtf import options
 
+_CommandCallbackT = t.TypeVar("_CommandCallbackT", bound=t.Callable[..., t.Coroutine[t.Any, t.Any, None]])
+
 
 class _Implements(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[t.Type[lightbulb.Command]]] = None) -> None:
@@ -38,9 +41,9 @@ class _Implements(base._NotAGeneric):
 
     def __getitem__(
         self,
-        item: t.Union[t.Type[lightbulb.Command], t.Tuple[t.Type[lightbulb.Command]]],
-    ):
-        if isinstance(item, tuple):
+        item: t.Union[t.Type[lightbulb.Command], t.Sequence[t.Type[lightbulb.Command]]],
+    ) -> _Implements:
+        if isinstance(item, collections.Sequence):
             return self.__class__(list(item))
         return self.__class__([item])
 
@@ -49,8 +52,8 @@ class _Checks(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[lightbulb.Check]] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: t.Union[lightbulb.Check, t.Tuple[lightbulb.Check]]) -> _Checks:
-        if isinstance(item, tuple):
+    def __getitem__(self, item: t.Union[lightbulb.Check, t.Sequence[lightbulb.Check]]) -> _Checks:
+        if not isinstance(item, lightbulb.Check):
             return self.__class__(list(item))
         return self.__class__([item])
 
@@ -65,8 +68,8 @@ class _Aliases(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[str]] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: t.Union[str, t.Tuple[str]]) -> _Aliases:
-        if isinstance(item, tuple):
+    def __getitem__(self, item: t.Union[str, t.Sequence[str]]) -> _Aliases:
+        if not isinstance(item, str):
             return self.__class__(list(item))
         return self.__class__([item])
 
@@ -75,8 +78,8 @@ class _Guilds(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[int]] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: t.Union[t.Optional[int], t.Tuple[int]]) -> _Guilds:
-        if isinstance(item, tuple):
+    def __getitem__(self, item: t.Union[t.Optional[int], t.Sequence[int]]) -> _Guilds:
+        if not isinstance(item, int) and item is not None:
             return self.__class__(list(item))
         if item is None:
             return self.__class__(None)
@@ -131,7 +134,7 @@ class _Command(base._NotAGeneric):
     def __getitem__(self, item: t.Any) -> lightbulb.CommandLike:
         items = {i.__class__: i for i in item}
 
-        async def _wrapper(ctx: lightbulb.Context, *args, _callback, **kwargs) -> None:
+        async def _wrapper(ctx: lightbulb.Context, *args: t.Any, _callback: _CommandCallbackT, **kwargs: t.Any) -> None:
             await _callback(ctx, *args, **kwargs)
 
         callback = functools.partial(_wrapper, _callback=items[executable._Executes].val)

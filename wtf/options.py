@@ -44,7 +44,7 @@ class _Choices(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[hikari.CommandChoice]] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: t.Union[hikari.CommandChoice, t.Tuple[hikari.CommandChoice]]):
+    def __getitem__(self, item: t.Union[hikari.CommandChoice, t.Sequence[hikari.CommandChoice]]) -> _Choices:
         if isinstance(item, hikari.CommandChoice):
             return self.__class__([item])
         return self.__class__(list(item))
@@ -54,8 +54,8 @@ class _ChannelTypes(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[hikari.ChannelType]] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: t.Union[hikari.ChannelType, t.Tuple[hikari.ChannelType]]) -> _ChannelTypes:
-        if isinstance(item, tuple):
+    def __getitem__(self, item: t.Union[hikari.ChannelType, t.Sequence[hikari.ChannelType]]) -> _ChannelTypes:
+        if not isinstance(item, hikari.ChannelType):
             return self.__class__(list(item))
         return self.__class__([item])
 
@@ -64,7 +64,7 @@ class _Options(base._NotAGeneric):
     def __init__(self, val: t.Optional[t.List[lightbulb.OptionLike]] = None) -> None:
         self.val = val
 
-    def __getitem__(self, item: t.Union[lightbulb.OptionLike, t.Tuple[lightbulb.OptionLike]]):
+    def __getitem__(self, item: t.Union[lightbulb.OptionLike, t.Sequence[lightbulb.OptionLike]]) -> _Options:
         if isinstance(item, lightbulb.OptionLike):
             return self.__class__([item])
         return self.__class__(list(item))
