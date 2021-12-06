@@ -7,7 +7,7 @@ import types
 from setuptools import find_namespace_packages
 from setuptools import setup
 
-name = "lightbulb-wtf"
+name = "wtf"
 
 
 def parse_meta():
