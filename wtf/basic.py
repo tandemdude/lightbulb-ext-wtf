@@ -2,9 +2,7 @@
 # Copyright © tandemdude 2021-present
 from __future__ import annotations
 
-__all__ = ["Name", "Description", "Type"]
-
-import typing as t
+__all__ = ["Name", "Description"]
 
 from wtf import base
 
@@ -17,10 +15,5 @@ class _Description(base._SingleArgBase[str]):
     pass
 
 
-class _Type(base._SingleArgBase[t.Any]):
-    pass
-
-
 Name = _Name()
 Description = _Description()
-Type = _Type()

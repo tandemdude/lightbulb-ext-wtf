@@ -52,6 +52,8 @@ setup(
     url="https://github.com/tandemdude/lightbulb-wtf",
     packages=find_namespace_packages(include=[name + "*"]),
     license="Beerware",
+    include_package_data=True,
+    zip_safe=False,
     install_requires=parse_requirements_file("requirements.txt"),
     python_requires=">=3.8.0,<3.11",
     classifiers=[

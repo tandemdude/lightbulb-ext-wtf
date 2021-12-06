@@ -11,11 +11,7 @@ import lightbulb
 from wtf import base
 
 
-class _Executes(
-    base._SingleArgBase[
-        t.Callable[[lightbulb.Context], t.Coroutine[t.Any, t.Any, None]]
-    ]
-):
+class _Executes(base._SingleArgBase[t.Callable[[lightbulb.Context], t.Coroutine[t.Any, t.Any, None]]]):
     pass
 
 
