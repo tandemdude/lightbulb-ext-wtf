@@ -14,7 +14,10 @@ def parse_meta():
     with open(os.path.join(name, "__init__.py")) as fp:
         code = fp.read()
 
-    token_pattern = re.compile(r"^__(?P<key>\w+)?__\s*=\s*(?P<quote>(?:'{3}|\"{3}|'|\"))(?P<value>.*?)(?P=quote)", re.M)
+    token_pattern = re.compile(
+        r"^__(?P<key>\w+)?__\s*=\s*(?P<quote>(?:'{3}|\"{3}|'|\"))(?P<value>.*?)(?P=quote)",
+        re.M,
+    )
 
     groups = {}
 
