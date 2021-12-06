@@ -6,3 +6,5 @@ from wtf import executable
 from wtf.commands import *
 from wtf.basic import *
 from wtf.executable import *
+
+__version__ = "0.0.1"
