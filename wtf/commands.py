@@ -20,8 +20,9 @@ __all__ = [
     "Command",
 ]
 
-import collections
+import collections.abc
 import functools
+import inspect
 import typing as t
 
 import hikari
@@ -43,7 +44,7 @@ class _Implements(base._NotAGeneric):
         self,
         item: t.Union[t.Type[lightbulb.Command], t.Sequence[t.Type[lightbulb.Command]]],
     ) -> _Implements:
-        if isinstance(item, collections.Sequence):
+        if isinstance(item, collections.abc.Sequence):
             return self.__class__(list(item))
         return self.__class__([item])
 
@@ -135,7 +136,9 @@ class _Command(base._NotAGeneric):
         items = {i.__class__: i for i in item}
 
         async def _wrapper(ctx: lightbulb.Context, *args: t.Any, _callback: _CommandCallbackT, **kwargs: t.Any) -> None:
-            await _callback(ctx, *args, **kwargs)
+            res = _callback(ctx, *args, **kwargs)
+            if inspect.iscoroutine(res):
+                await res
 
         callback = functools.partial(_wrapper, _callback=items[executable._Executes].val)
         setattr(callback, "__cmd_types__", items[_Implements].val)
