@@ -135,12 +135,17 @@ class _Command(base._NotAGeneric):
     def __getitem__(self, item: t.Any) -> lightbulb.CommandLike:
         items = {i.__class__: i for i in item}
 
-        async def _wrapper(ctx: lightbulb.Context, *args: t.Any, _callback: _CommandCallbackT, **kwargs: t.Any) -> None:
-            res = _callback(ctx, *args, **kwargs)
-            if inspect.iscoroutine(res):
-                await res
+        if executable._Executes in items:
+            async def _wrapper(ctx: lightbulb.Context, *args: t.Any, _callback: _CommandCallbackT, **kwargs: t.Any) -> None:
+                res = _callback(ctx, *args, **kwargs)
+                if inspect.iscoroutine(res):
+                    await res
 
-        callback = functools.partial(_wrapper, _callback=items[executable._Executes].val)
+            callback = functools.partial(_wrapper, _callback=items[executable._Executes].val)
+        else:
+            async def callback(_: lightbulb.Context) -> None:
+                return
+
         setattr(callback, "__cmd_types__", items[_Implements].val)
 
         guilds = getattr(items.get(_Guilds), "val", hikari.UNDEFINED)
@@ -237,22 +242,155 @@ Example:
         guilds = Guilds[1234, 5678]
 """
 Subcommands = _Subcommands()
-"""A container for this command's subcommands."""
+"""A container for the enclosing command's subcommands.
+
+Required Parameters:
+    - *``Command`` one or more commands to register to the enclosing command as subcommands.
+
+Example:
+    
+    .. code-block:: python
+    
+        subcommands = Subcommands[Command[...], Command[...]]
+"""
 Parser = _Parser()
-"""The command's parser class."""
+"""The parser class to use for the enclosing command.
+See :obj:`lightbulb.commands.base.CommandLike.parser`.
+
+Required Parameters:
+    - Type[:obj:`lightbulb.utils.parser.BaseParser] parser class for the enclosing command.
+
+Example:
+
+    .. code-block:: python
+        
+        parser = Parser[lightbulb.utils.Parser]
+"""
 CooldownManager = _CooldownManager()
-"""The command's cooldown manager instance."""
+"""The cooldown manager instance to use for the enclosing command.
+See :obj:`lightbulb.commands.base.CommandLike.cooldown_manager`.
+
+Required Parameters:
+    - :obj:`lightbulb.cooldowns.CooldownManager` cooldown manager instance for the enclosing command.
+
+Example:
+
+    .. code-block:: python
+    
+        manager = CooldownManager[lightbulb.CooldownManager(lambda _: lightbulb.UserBucket(10, 1))]
+"""
 HelpGetter = _HelpGetter()
-"""The command's long help text getter function."""
+"""The long help text getter function for the enclosing command.
+See :obj:`lightbulb.commands.base.CommandLike.help_getter`.
+
+Required Parameters:
+    - Syncronous function returning the long help text for the enclosing command.
+
+Example:
+
+    .. code-block:: python
+    
+        getter = HelpGetter[lambda _: "foobar"]
+"""
 AutoDefer = _AutoDefer()
-"""Whether or not the command will be automatically deferred upon invocation."""
+"""Whether or not the enclosing command's response will be automatically deferred upon invocation.
+See :obj:`lightbulb.commands.base.CommandLike.auto_defer`.
+
+Required Parameters:
+    - :obj:`bool` whether or not to automatically defer the response of the enclosing command.
+
+Example:
+
+    .. code-block:: python
+    
+        defer = AutoDefer[True]
+"""
 Ephemeral = _Ephemeral()
-"""Whether or not responses from the command will be ephemeral by default."""
+"""Whether or not the enclosing command's responses will be ephemeral by default.
+See :obj:`lightbulb.commands.base.CommandLike.ephemeral`.
+
+Required Parameters:
+    - :obj:`bool` whether or not to send command responses as ephemeral by default.
+
+Example:
+
+    .. code-block:: python
+    
+        ephemeral = Ephemeral[True]
+"""
 CheckExempt = _CheckExempt()
-"""The check exempt predicate to use for this command."""
+"""The check exempt predicate to use for the enclosing command.
+Similar to :obj:`lightbulb.decorators.check_exempt`.
+
+Required Parameters:
+    - Syncronous or asyncronous function to use as the enclosing command's check exempt predicate.
+
+Example:
+
+    .. code-block:: python
+    
+        exempt = CheckExempt[lambda ctx: ctx.author.id == 12345]
+"""
 Hidden = _Hidden()
-"""Whether or not the command should be hidden from the default help command."""
+"""Whether or not the enclosing command should be hidden from the default help command.
+See :obj:`lightbulb.commands.base.CommandLike.hidden`.
+
+Required Parameters:
+    - :obj:`bool` whether or not to hide the enclosing command from the default help command.
+
+Example:
+    
+    .. code-block:: python
+    
+        hidden = Hidden[True]
+"""
 InheritChecks = _InheritChecks()
-"""Whether or not the subcommand should inherit checks from the parent."""
+"""Whether or not the enclosing command should inherit checks from the parent command group.
+See :obj:`lightbulb.commands.base.CommandLike.inherit_checks`.
+
+Required Parameters:
+    :obj:`bool` whether or not the enclosing command will inherit the parent's checks.
+
+Example:
+
+    .. code-block:: python
+    
+        inherit = InheritChecks[True]
+"""
 Command = _Command()
-"""A command."""
+"""A complex structure representing a lightbulb :obj:`~lightbulb.commands.base.CommandLike` object.
+Similar to :obj:`lightbulb.decorators.command`.
+
+Required Parameters:
+    - :obj:`~.basic.Name` name of the command.
+    - :obj:`~.basic.Description` description of the command.
+    - :obj:`~.Implements` command types the command implements.
+
+Optional Parameters:
+    - :obj:`~.executable.Executes` the executable callback for the command.
+    - :obj:`~.options.Options` options for the command.
+    - :obj:`~.Checks` checks for the command.
+    - :obj:`~.ErrorHandler` error handler for the command.
+    - :obj:`~.Aliases` aliases for the command.
+    - :obj:`~.Guilds` guilds for the command.
+    - :obj:`~.Subcommands` subcommands for the command.
+    - :obj:`~.Parser` parser for the command.
+    - :obj:`~.CooldownManager` cooldown manager for the command.
+    - :obj:`~.HelpGetter` help getter for the command.
+    - :obj:`~.AutoDefer` auto defer value for the command.
+    - :obj:`~.Ephemeral` ephemeral value for the command.
+    - :obj:`~.CheckExempt` check exempt predicate for the command.
+    - :obj:`~.Hidden` hidden value for the command.
+    - :obj:`~.InheritChecks` inherit checks value for the command.
+
+Example:
+    
+    .. code-block:: python
+    
+        cmd = Command[
+            Implements[lightbulb.PrefixCommand],
+            Name["foo"],
+            Description["test command"],
+            Executes[lambda ctx: ctx.respond("bar")]
+        ]
+"""
