@@ -30,5 +30,3 @@ cmd = Command[
 bot.command(cmd)
 bot.run()
 ```
-
-Most features have not been implemented yet but are in development (checks, options, etc).

@@ -169,15 +169,73 @@ class _Command(base._NotAGeneric):
 
 
 Implements = _Implements()
-"""The command types the command implements."""
+"""The command type(s) the enclosing command implements.
+Similar to lightbulb's :obj:`lightbulb.decorators.implements` decorator.
+
+Required Parameters:
+    - *Type[:obj:`lightbulb.commands.base.Command`] one or more command types for the enclosing command.
+
+Example:
+
+    .. code-block:: python
+    
+        impl = Implements[lightbulb.SlashCommand, lightbulb.PrefixCommand]
+"""
 Checks = _Checks()
-"""The command's checks."""
+"""The check object(s) to apply to the enclosing command.
+Similar to lightbulb's :obj:`lightbulb.decorators.add_checks` decorator.
+
+Required Parameters:
+    - *:obj:`lightbulb.checks.Check` one or more checks to apply to the enclosing command.
+
+Example:
+
+    .. code-block:: python
+    
+        checks = Checks[lightbulb.guild_only, lightbulb.owner_only]
+"""
 ErrorHandler = _ErrorHandler()
-"""The command's error handler function."""
+"""The error handler function to use for the enclosing command.
+Similar to lightbulb's :obj:`lightbulb.commands.base.CommandLike.set_error_handler` decorator.
+
+Required Parameters:
+    - Asyncronous function to use as the error handler for the enclosing command.
+
+Example:
+    
+    .. code-block:: python
+    
+        async def _handler(event: lightbulb.CommandErrorEvent):
+            ...
+        
+        handler = ErrorHandler[_handler]
+"""
 Aliases = _Aliases()
-"""The command's aliases."""
+"""The aliases for the name of the enclosing command.
+See :obj:`lightbulb.commands.base.CommandLike.aliases`.
+
+Required Parameters:
+    - *:obj:`str` one or more aliases for the enclosing command.
+
+Example:
+
+    .. code-block:: python
+    
+        aliases = Aliases["foo", "bar", "baz"]
+"""
 Guilds = _Guilds()
-"""The guilds that the command will be created in."""
+"""The guilds that the enclosing command will be created in.
+See :obj:`lightbulb.commands.base.CommandLike.guilds`.
+
+Required Parameters:
+    - *:obj:`int` one or more guild IDs for the enclosing command to be created in.
+
+Example:
+
+    .. code-block:: python
+        
+        guilds = Guilds[1234, 5678]
+"""
 Subcommands = _Subcommands()
 """A container for this command's subcommands."""
 Parser = _Parser()
