@@ -9,8 +9,8 @@ import typing as t
 import hikari
 import lightbulb
 
-from wtf import base
-from wtf import basic
+from . import base
+from . import basic
 
 
 class _Type(base._SingleArgBase[t.Any]):

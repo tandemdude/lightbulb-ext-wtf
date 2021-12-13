@@ -8,7 +8,7 @@ import typing as t
 
 import lightbulb
 
-from wtf import base
+from . import base
 
 
 class _Executes(base._SingleArgBase[t.Callable[[lightbulb.Context], t.Union[None, t.Coroutine[t.Any, t.Any, None]]]]):

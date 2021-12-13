@@ -14,17 +14,17 @@ import os
 import re
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join("..", "..")))
+sys.path.insert(0, os.path.abspath(os.path.join("..", "..", "lightbulb", "ext")))
 sys.setrecursionlimit(1500)
 
 
 # -- Project information -----------------------------------------------------
 
-project = "lightbulb-wtf"
+project = "lightbulb-ext-wtf"
 copyright = "2021-present, tandemdude"
 author = "tandemdude"
 
-with open("../../wtf/__init__.py") as fp:
+with open("../../lightbulb/ext/wtf/__init__.py") as fp:
     file = fp.read()
 version = re.search(r"__version__ = \"([^\"]+)", file).group(1)
 release = version

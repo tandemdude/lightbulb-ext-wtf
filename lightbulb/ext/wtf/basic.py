@@ -4,7 +4,7 @@ from __future__ import annotations
 
 __all__ = ["Name", "Description"]
 
-from wtf import base
+from . import base
 
 
 class _Name(base._SingleArgBase[str]):

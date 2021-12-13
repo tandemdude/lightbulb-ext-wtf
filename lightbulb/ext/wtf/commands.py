@@ -28,10 +28,10 @@ import typing as t
 import hikari
 import lightbulb
 
-from wtf import base
-from wtf import basic
-from wtf import executable
-from wtf import options
+from . import base
+from . import basic
+from . import executable
+from . import options
 
 _CommandCallbackT = t.TypeVar("_CommandCallbackT", bound=t.Callable[..., t.Coroutine[t.Any, t.Any, None]])
 

@@ -7,11 +7,11 @@ import types
 from setuptools import find_namespace_packages
 from setuptools import setup
 
-name = "wtf"
+name = "lightbulb"
 
 
 def parse_meta():
-    with open(os.path.join(name, "__init__.py")) as fp:
+    with open(os.path.join(name, "ext", "wtf", "__init__.py")) as fp:
         code = fp.read()
 
     token_pattern = re.compile(
@@ -42,14 +42,14 @@ def parse_requirements_file(path):
 meta = parse_meta()
 
 setup(
-    name="lightbulb-wtf",
+    name="lightbulb-ext-wtf",
     version=meta.version,
     description="A very strange method of declaring commands with hikari-lightbulb",
     long_description=long_description(),
     long_description_content_type="text/markdown",
     author="tandemdude",
     author_email="tandemdude1@gmail.com",
-    url="https://github.com/tandemdude/lightbulb-wtf",
+    url="https://github.com/tandemdude/lightbulb-ext-wtf",
     packages=find_namespace_packages(include=[name + "*"]),
     license="Beerware",
     include_package_data=True,

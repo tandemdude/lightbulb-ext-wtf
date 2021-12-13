@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # Copyright © tandemdude 2021-present
-from wtf import basic
-from wtf import commands
-from wtf import executable
-from wtf import options
-from wtf.basic import *
-from wtf.commands import *
-from wtf.executable import *
-from wtf.options import *
+from . import basic
+from . import commands
+from . import executable
+from . import options
+from .basic import *
+from .commands import *
+from .executable import *
+from .options import *
 
 __all__ = [
     "Name",
@@ -39,4 +39,4 @@ __all__ = [
     "Option",
 ]
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"

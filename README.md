@@ -12,7 +12,7 @@ A basic command:
 
 ```python
 import lightbulb
-from wtf import *
+from lightbulb.ext.wtf import *
 
 bot = lightbulb.BotApp(...)
 

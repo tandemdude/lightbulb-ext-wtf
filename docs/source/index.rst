@@ -31,7 +31,7 @@ Use the package manager `pip <https://pip.pypa.io/en/stable/>`_ to install light
 
 .. code-block:: bash
 
-   pip install lightbulb-wtf
+   pip install lightbulb-ext-wtf
 
 
 Issues
@@ -44,7 +44,7 @@ Please also open an issue for any new features you would like to see added.
 Links
 =====
 
-**Repository:** `GitHub <https://github.com/tandemdude/lightbulb-wtf>`_
+**Repository:** `GitHub <https://github.com/tandemdude/lightbulb-ext-wtf>`_
 
 **Documentation:** `View Here <https://lightbulb-wtf.readthedocs.io/en/latest/>`_
 
