@@ -97,7 +97,7 @@ class _Subcommands(base._NotAGeneric):
         return self.__class__([item])
 
 
-class _Parser(base._SingleArgBase[t.Type[lightbulb.utils.BaseParser]]):
+class _Parser(base._SingleArgBase[t.Type[lightbulb.BaseParser]]):
     pass
 
 
@@ -136,13 +136,17 @@ class _Command(base._NotAGeneric):
         items = {i.__class__: i for i in item}
 
         if executable._Executes in items:
-            async def _wrapper(ctx: lightbulb.Context, *args: t.Any, _callback: _CommandCallbackT, **kwargs: t.Any) -> None:
+
+            async def _wrapper(
+                ctx: lightbulb.Context, *args: t.Any, _callback: _CommandCallbackT, **kwargs: t.Any
+            ) -> None:
                 res = _callback(ctx, *args, **kwargs)
                 if inspect.iscoroutine(res):
                     await res
 
             callback = functools.partial(_wrapper, _callback=items[executable._Executes].val)
         else:
+
             async def callback(_: lightbulb.Context) -> None:
                 return
 
@@ -258,13 +262,13 @@ Parser = _Parser()
 See :obj:`lightbulb.commands.base.CommandLike.parser`.
 
 Required Parameters:
-    - Type[:obj:`lightbulb.utils.parser.BaseParser] parser class for the enclosing command.
+    - Type[:obj:`lightbulb.BaseParser] parser class for the enclosing command.
 
 Example:
 
     .. code-block:: python
         
-        parser = Parser[lightbulb.utils.Parser]
+        parser = Parser[lightbulb.Parser]
 """
 CooldownManager = _CooldownManager()
 """The cooldown manager instance to use for the enclosing command.
